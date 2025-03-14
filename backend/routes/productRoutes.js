@@ -22,19 +22,13 @@ router.get(
   '/:id',
   asyncHandler(async (req, res) => {
     const { id } = req.params;
-
-    // ✅ Check if the ID is a valid ObjectId
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      res.status(400).json({ message: 'Invalid Product ID' });
-      return;
-    }
-
     const product = await Product.findById(id);
 
     if (product) {
       res.json(product);
     } else {
-      res.status(404).json({ message: 'Product not found' });
+      res.status(404);
+      throw new Error('Product not found')
     }
   })
 );
